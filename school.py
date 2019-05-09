@@ -26,7 +26,7 @@ def printUnivList(ulist,num):
 
 if __name__ == '__main__':
     uinfo = []
-    url = 'http://www.zuihaodaxue.com/zuihaodaxuepaiming2018.html'
+    url = 'http://www.zuihaodaxue.com/zuihaodaxuepaiming2019.html'
     html = getHTMLText(url)
     fillUnivList(uinfo,html)
     printUnivList(uinfo,100)
