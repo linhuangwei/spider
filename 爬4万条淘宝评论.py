@@ -30,24 +30,30 @@ def loads_jsonp(_jsonp):
         raise ValueError('Invalid Input')
 
 
-def get_info(json):
-    appendComment = []
-    commentTime = []
-    content = []
-    appendpics = []
-    appendreply = []
-    auctionSku = []
-    displayUserNick = []
-    pics = []
-    rateContent = []
-    rateDate = []
-    reply = []
+appendComment = []
+commentTime = []
+content = []
+appendpics = []
+appendreply = []
+auctionSku = []
+displayUserNick = []
+pics = []
+rateContent = []
+rateDate = []
+reply = []
 
+urls = ['https://rate.tmall.com/list_detail_rate.htm?itemId=564430245247&spuId=925720635&sellerId=420722466&order=3&currentPage={}&append=0&content=1'.format(
+    i) for i in range(1, 2001)]
+
+for url in urls:
+    print (url)
+    page = get_page(url)
+    _json = loads_jsonp(page)
 
     for i in range(20):
-        comment = json['rateDetail']['rateList'][i]
+        comment = _json['rateDetail']['rateList'][i]
 
-        if(comment['appendComment']):
+        if (comment['appendComment']):
             appendComment.append('有')
             commentTime.append(comment['appendComment']['commentTime'])
             content.append(comment['appendComment']['content'])
@@ -72,22 +78,10 @@ def get_info(json):
         rateDate.append(comment['rateDate'])
         reply.append(comment['reply'])
 
-    result = {'用户名': displayUserNick, '颜色': auctionSku, '评论时间': rateDate, '评论内容': rateContent, '评论图片': pics, '商家回应': reply,'是否有追评': appendComment,
-              '追评时间':commentTime, '追评内容': content, '追评图片': appendpics, '追评商家回应': appendreply}
-    print(result)
-    return result
+result = {'用户名': displayUserNick, '颜色': auctionSku, '评论时间': rateDate, '评论内容': rateContent, '评论图片': pics,
+              '商家回应': reply, '是否有追评': appendComment,
+              '追评时间': commentTime, '追评内容': content, '追评图片': appendpics, '追评商家回应': appendreply}
 
+results = pd.DataFrame(result)
 
-
-urls = ['https://rate.tmall.com/list_detail_rate.htm?itemId=564430245247&spuId=925720635&sellerId=420722466&order=3&currentPage={}&append=0&content=1'.format(
-    i) for i in range(1, 9)]
-
-for url in urls:
-    page = get_page(url)
-    print(page)
-    _json = loads_jsonp(page)
-    result = get_info(_json)
-
-    results = pd.DataFrame(result)
-
-    results.to_excel('E://淘宝.xlsx')
+results.to_excel('E://淘宝.xlsx')
